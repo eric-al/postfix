@@ -26,6 +26,11 @@ if node['postfix']['use_procmail']
 
 end
 
+if node['postfix']['use_mysql']
+
+  package "postfix-mysql"
+
+end
 
 service "postfix" do
   supports :status => true, :restart => true, :reload => true

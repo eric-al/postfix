@@ -35,6 +35,8 @@ default['postfix']['smtp_sasl_passwd']    = ""
 
 default['postfix']['use_procmail'] = false
 
+default['postfix']['use_mysql'] = false
+
 default['postfix']['milter_default_action']  = "tempfail"
 default['postfix']['milter_protocol']  = "6"
 default['postfix']['smtpd_milters']  = ""
