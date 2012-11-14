@@ -47,3 +47,22 @@ milter_default_action = <%= node['postfix']['milter_default_action'] %>
 milter_protocol = <%= node['postfix']['milter_protocol'] %>
 smtpd_milters = <%= node['postfix']['smtpd_milters'] %>
 non_smtpd_milters = <%= node['postfix']['non_smtpd_milters'] %>
+
+<% if node['postfix']['use_mysql'] -%>
+virtual_alias_maps = proxy:mysql:/etc/postfix/mysql-virtual_forwardings.cf, mysql:/etc/postfix/mysql-virtual_email2email.cf
+virtual_mailbox_domains = proxy:mysql:/etc/postfix/mysql-virtual_domains.cf
+virtual_mailbox_maps = proxy:mysql:/etc/postfix/mysql-virtual_mailboxes.cf
+<% end -%>
+
+<% if node['postfix']['deliver_local'] -%>
+virtual_alias_domains =
+virtual_mailbox_base = /home/vmail
+virtual_uid_maps = static:5000
+virtual_gid_maps = static:5000
+virtual_create_maildirsize = yes
+virtual_maildir_extended = yes
+proxy_read_maps = $local_recipient_maps $mydestination $virtual_alias_maps $virtual_alias_domains $virtual_mailbox_maps $virtual_mailbox_domains $relay_recipient_maps $relay_domains $canonical_maps $sender_canonical_maps $recipient_canonical_maps $relocated_maps $transport_maps $mynetworks $virtual_mailbox_limit_maps
+virtual_transport = dovecot
+dovecot_destination_recipient_limit = 1
+smtpd_recipient_restrictions = permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination
+<% end -%>

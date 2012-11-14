@@ -77,3 +77,8 @@ ifmail    unix  -       n       n       -       -       pipe
   flags=F user=ftn argv=/usr/lib/ifmail/ifmail -r $nexthop ($recipient)
 bsmtp     unix  -       n       n       -       -       pipe
   flags=Fq. user=foo argv=/usr/local/sbin/bsmtp -f $sender $nexthop $recipient
+
+<% if node['dovecot']['imap_enabled'] -%>
+dovecot   unix  -       n       n       -       -       pipe
+  flags=DRhu user=vmail:vmail argv=/usr/lib/dovecot/deliver -d ${recipient}
+<% end -%>

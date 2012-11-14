@@ -28,10 +28,15 @@ end
 
 if node['postfix']['use_mysql']
 
-  package "postfix-mysql"
+  include_recipe "postfix::mysql"
 
 end
 
+if node['postfix']['deliver_local']
+
+  include_recipe "postfix::deliver_local"
+
+end
 service "postfix" do
   supports :status => true, :restart => true, :reload => true
   action :enable
